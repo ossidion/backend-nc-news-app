@@ -95,7 +95,6 @@ function createArticles(articleData) {
 
 function createComments(commentData, articleRows) {
 
-  console.log(articleRows, "articleRows within createComments")
   return db.query(`CREATE TABLE comments(
     comment_id SERIAL PRIMARY KEY,
     article_id int REFERENCES articles(article_id),

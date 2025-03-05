@@ -16,7 +16,7 @@ describe("convertTimestampToDate", () => {
     const result = convertTimestampToDate(input);
     expect(result.created_at).toBeDate();
     expect(result.created_at).toEqual(new Date(timestamp));
-    console.log(input)
+    // console.log(input)
     // console.log(result.created_at)
   });
   test("does not mutate the input", () => {

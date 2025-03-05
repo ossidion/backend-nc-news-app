@@ -9,7 +9,8 @@
     "test": "jest",
     "prepare": "husky install",
     "start": "node listen.js",
-    "test-seed": "jest seed.test.js"
+    "test-seed": "jest seed.test.js",
+    "queries": "node ./queries.js"
   },
   "repository": {
     "type": "git",
