@@ -23,8 +23,10 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
   .then(() => {
     return createArticles(articleData);
   })
-  .then((articleData) => {
-    return createComments(commentData, articleData);
+  .then((processedArticleData) => {
+    // console.log(processedArticleData, "<<< Here is articleData in .then")
+    // console.log(commentData, "<<< Here is commentData in .then")
+    return createComments(commentData, processedArticleData);
   })
 };
 
@@ -88,13 +90,12 @@ function createArticles(articleData) {
   })
 
   .then((insertArticleData) => {
-    const articleRows = insertArticleData.rows
-    return articleRows
+    const processedArticleData = insertArticleData.rows
+    return processedArticleData
   })
 }
 
-function createComments(commentData, articleRows) {
-
+function createComments(commentData, processedArticleData) {
   return db.query(`CREATE TABLE comments(
     comment_id SERIAL PRIMARY KEY,
     article_id int REFERENCES articles(article_id),
@@ -103,19 +104,24 @@ function createComments(commentData, articleRows) {
     author VARCHAR(100) REFERENCES users(username),
     created_at TIMESTAMP);`)
 
-  .then (() => {
-    const formattedCommentData = commentData.map((comment) => {
-      const convertedDate = convertTimestampToDate(comment)
-      return [articleRows.article_id, comment.body, comment.votes, comment.author, convertedDate.created_at]
+  .then (({ }) => {
+    console.log(processedArticleData, "line 110")
+      const articleIdLookup = {};
+      processedArticleData.forEach(articleRow => {
+        articleIdLookup[articleRow.title] = articleRow.article_id      
+      });      
+      
+      const formattedCommentData = commentData.map((comment) => {
+        const convertedDate = convertTimestampToDate(comment)
+        return [articleIdLookup[comment.article_title], comment.body, comment.votes, comment.author, convertedDate.created_at]
       })
-
-    const insertCommentData = format(`INSERT INTO comments(article_id, body, votes, author, created_at) VALUES %L RETURNING *`,formattedCommentData)
-    return db.query(insertCommentData)
-  })
-  
-  .then((insertCommentData) => {
-    return insertCommentData.rows
-  })
-}
+      
+      const insertCommentData = format(`INSERT INTO comments(article_id, body, votes, author, created_at) VALUES %L RETURNING *`,formattedCommentData)
+      return db.query(insertCommentData)
+      
+      .then((insertCommentData) => {
+        return insertCommentData.rows
+      })})
+    }
 
 module.exports = seed;
