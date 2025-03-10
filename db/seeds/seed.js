@@ -105,7 +105,6 @@ function createComments(commentData, processedArticleData) {
     created_at TIMESTAMP);`)
 
   .then (({ }) => {
-    console.log(processedArticleData, "line 110")
       const articleIdLookup = {};
       processedArticleData.forEach(articleRow => {
         articleIdLookup[articleRow.title] = articleRow.article_id      
