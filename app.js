@@ -1,7 +1,7 @@
 const express = require("express");
 const db = require("./db/connection");
 const endpoints = require("./endpoints.json");
-const {getAllTopics, getArticleById, getAllArticles} = require("./controllers/news.controllers");
+const {getAllTopics, getArticleById, getAllArticles, getCommentsByArticleId} = require("./controllers/news.controllers");
 const {handleInvalidPath, handleCumstomErrors, handlePsqlErrors} = require("./controllers/errors.controllers");
 
 const app = express();
@@ -15,6 +15,8 @@ app.get("/api/topics", getAllTopics);
 app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:id", getArticleById);
+
+app.get("/api/articles/:id/comments", getCommentsByArticleId);
 
 app.use(handleCumstomErrors);
 

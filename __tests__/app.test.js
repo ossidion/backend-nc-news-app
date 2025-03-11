@@ -15,7 +15,7 @@ beforeAll(() => seed(data));
 afterAll(() => db.end());
 
 describe("ANY:/notAPath", () => {
-  test("404: Responds with an error - endpoint has not been found.", () => {
+  test("404: Responds with an error - endpoint has not been found", () => {
     return request(app)
       .get("/notAPath")
       .expect(404)
@@ -39,7 +39,7 @@ describe("GET /api", () => {
 
 
 describe("GET /api/topics", () => {
-  test("200: Responds with an array of topic objects each of which should have a slug and description.", () => {
+  test("200: Responds with an array of topic objects each of which should have a slug and description", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -55,7 +55,7 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/article/:id", () => {
-  test("200: Responds with an article object, which should have the correct properties.", () => {
+  test("200: Responds with an article object, which should have the correct properties", () => {
     return request(app)
       .get("/api/articles/4")
       .expect(200)
@@ -71,7 +71,7 @@ describe("GET /api/article/:id", () => {
       });
   });
 
-  test("404: Responds with a 404 error if object not found.", () => {
+  test("404: Responds with a 404 error if object not found", () => {
     const id = 4286723
     return request(app)
       .get(`/api/articles/${id}`)
@@ -81,7 +81,7 @@ describe("GET /api/article/:id", () => {
       });
   });
 
-  test("400: Responds with a 400 error if made a bad request.", () => {
+  test("400: Responds with a 400 error if made a bad request", () => {
     const id = "banana"
     return request(app)
       .get(`/api/articles/${id}`)
@@ -94,15 +94,13 @@ describe("GET /api/article/:id", () => {
 
 
 describe("GET /api/articles", () => {
-  test("200: Responds with an array of article objects each of which should have the correct properties and sorted in date descending order.", () => {
+  test("200: Responds with an array of article objects each of which should have the correct properties and sorted in date descending order", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
         expect(body.rows.length).not.toBe(0);
-        expect(body.rows).toBeSortedBy("created_at", {descending: true,
-
-        });
+        expect(body.rows).toBeSortedBy("created_at", {descending: true,});
         body.rows.forEach(article => {
           expect(typeof article.author).toBe("string");
           expect(typeof article.title).toBe("string");
@@ -113,6 +111,58 @@ describe("GET /api/articles", () => {
           expect(typeof article.article_img_url).toBe("string");
           expect(typeof article.comment_count).toBe("number");
         });
+      });
+  });
+});
+
+describe("GET /api/article/:article_id/comments", () => {
+  test("200: Responds with all comments for an article", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.rows).toBeSortedBy("created_at", {descending: true,});
+        body.rows.forEach(comment => {
+          expect(comment.article_id).toBe(3);
+          expect(comment).toEqual(expect.objectContaining({
+            comment_id: expect.any(Number), 
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number)
+          }));
+        });
+      });
+  });
+
+  test("404: Responds with a 404 error if article not found.", () => {
+    const id = 4566546
+    return request(app)
+      .get(`/api/articles/${id}/comments`)
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe(`Article not found with id: ${id}`);
+      });
+  });
+
+  test("404: Responds with a 404 error if no comments associated with specified article.", () => {
+    const id = 4
+    return request(app)
+      .get(`/api/articles/${id}/comments`)
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe(`There are no comments associated with this article: ${id}`);
+      });
+  });
+
+  test("400: Responds with a 400 error if made a bad request.", () => {
+    const id = "banana"
+    return request(app)
+      .get(`/api/articles/${id}/comments`)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad Request.");
       });
   });
 });

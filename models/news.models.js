@@ -34,4 +34,28 @@ const fetchAllArticles = () => {
     })
 }
 
-module.exports = {fetchAllTopics, fetchArticleById, fetchAllArticles}
+const fetchCommentsByArticleId = (id) => {
+    return db.query("SELECT article_id FROM articles WHERE article_id = $1", [id])
+    .then(({rows}) => {
+        const article = rows[0];
+        if (!article) {
+            return Promise.reject({
+                status: 404, 
+                msg: `Article not found with id: ${id}`,
+            });
+        } else {
+            return db.query("SELECT comments.comment_id, comments.votes, comments.created_at, comments.author, comments.body, comments.article_id FROM comments WHERE article_id = $1 ORDER BY comments.created_at DESC", [id])
+            .then(({rows}) => {
+                const commentCheck = rows[0];
+                if (!commentCheck) {
+                    return Promise.reject({
+                        status: 404, 
+                        msg: `There are no comments associated with this article: ${id}`,
+                    });
+                }
+                return rows;
+        });
+    }}
+)};
+
+module.exports = {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchCommentsByArticleId}
