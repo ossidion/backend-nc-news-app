@@ -53,3 +53,20 @@ You are now connected to database "nc_news_test" as user "ossidion".
          18 |          1 | This morning, I showered for nine minutes.                                                                                                                                           |    16 | butter_bridge | 2020-07-21 01:20:00
 (18 rows)
 
+    author     |                         title                          | article_id | topic |     created_at      | votes |                                            article_img_url                                            | comment_count 
+---------------+--------------------------------------------------------+------------+-------+---------------------+-------+-------------------------------------------------------------------------------------------------------+---------------
+ icellusedkars | Eight pug gifs that remind me of mitch                 |          3 | mitch | 2020-11-03 09:12:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             2
+ icellusedkars | A                                                      |          6 | mitch | 2020-10-18 02:00:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             1
+ icellusedkars | Sony Vaio; or, The Laptop                              |          2 | mitch | 2020-10-16 06:03:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ butter_bridge | Another article about Mitch                            |         13 | mitch | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ butter_bridge | Moustache                                              |         12 | mitch | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ rogersop      | UNCOVERED: catspiracy to bring down democracy          |          5 | cats  | 2020-08-03 14:14:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             2
+ butter_bridge | Living in the shadow of a great man                    |          1 | mitch | 2020-07-09 21:11:00 |   100 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |            11
+ butter_bridge | They're not exactly dogs, are they?                    |          9 | mitch | 2020-06-06 10:10:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             2
+ rogersop      | Seven inspirational thought leaders from Manchester UK |         10 | mitch | 2020-05-14 05:15:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ rogersop      | Student SUES Mitch!                                    |          4 | mitch | 2020-05-06 02:14:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ icellusedkars | Does Mitch predate civilisation?                       |          8 | mitch | 2020-04-17 02:08:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ icellusedkars | Am I a cat?                                            |         11 | mitch | 2020-01-15 22:21:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ icellusedkars | Z                                                      |          7 | mitch | 2020-01-07 14:08:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+(13 rows)
+

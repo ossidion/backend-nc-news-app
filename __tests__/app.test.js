@@ -5,6 +5,7 @@ const app = require("../app.js")
 const seed = require("../db/seeds/seed")
 const db = require("../db/connection");
 const data = require('../db/data/test-data/index');
+const sorted = require('jest-sorted')
 
 
 /* Set up your beforeEach & afterAll functions here */
@@ -38,12 +39,11 @@ describe("GET /api", () => {
 
 
 describe("GET /api/topics", () => {
-  test("200: Responds with an array of topics objects each of which should have a slug and description.", () => {
+  test("200: Responds with an array of topic objects each of which should have a slug and description.", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        console.log(body, "<<body in test on 46")
         expect(body.rows.length).not.toBe(0);
         body.rows.forEach(comment => {
           expect(typeof comment.slug).toBe("string");
@@ -88,6 +88,31 @@ describe("GET /api/article/:id", () => {
       .expect(400)
       .then(({body}) => {
         expect(body.msg).toBe("Bad Request.");
+      });
+  });
+});
+
+
+describe("GET /api/articles", () => {
+  test("200: Responds with an array of article objects each of which should have the correct properties and sorted in date descending order.", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.rows.length).not.toBe(0);
+        expect(body.rows).toBeSortedBy("created_at", {descending: true,
+
+        });
+        body.rows.forEach(article => {
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.topic).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("number");
+        });
       });
   });
 });

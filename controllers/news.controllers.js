@@ -1,5 +1,5 @@
 // const {response} = require("express");
-const {fetchAllTopics, fetchArticleById} = require("../models/news.models");
+const {fetchAllTopics, fetchArticleById, fetchAllArticles} = require("../models/news.models");
 
 const getAllTopics = (request, response) => {
     fetchAllTopics()
@@ -18,4 +18,10 @@ const getArticleById = (request, response, next) => {
     });
 };
 
-module.exports = {getAllTopics, getArticleById}
+const getAllArticles = (request, response) => {
+    fetchAllArticles()
+    .then(( rows ) => {response.status(200).send({rows})
+    })
+}
+
+module.exports = {getAllTopics, getArticleById, getAllArticles}

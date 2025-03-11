@@ -2,14 +2,9 @@ const db = require("../db/connection");
 
 
 const fetchAllTopics = (topic) => {
-    return db.query("SELECT * FROM topics")
+    return db.query("SELECT slug, description FROM topics")
     .then(({rows}) => {
-        const slugDescription = []
-        rows.forEach(comment => {
-            slugDescription.push({"slug": comment.slug, "description": comment.description})
-        })
-        return slugDescription
-
+        return rows
     })
 }
 
@@ -27,4 +22,16 @@ const fetchArticleById = (id) => {
     });
 };
 
-module.exports = {fetchAllTopics, fetchArticleById}
+
+const fetchAllArticles = () => {
+    return db.query("SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY created_at DESC;")
+
+    .then(({rows}) => {
+        rows.forEach(article => {
+            article.comment_count = Number(article.comment_count)
+        })
+        return rows
+    })
+}
+
+module.exports = {fetchAllTopics, fetchArticleById, fetchAllArticles}
