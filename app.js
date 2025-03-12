@@ -1,10 +1,23 @@
 const express = require("express");
-const db = require("./db/connection");
 const endpoints = require("./endpoints.json");
-const {getAllTopics, getArticleById, getAllArticles, getCommentsByArticleId} = require("./controllers/news.controllers");
-const {handleInvalidPath, handleCumstomErrors, handlePsqlErrors} = require("./controllers/errors.controllers");
+const {
+    getAllTopics, 
+    getArticleById, 
+    getAllArticles, 
+    getCommentsByArticleId,
+    postCommentByArticleId
+} = require("./controllers/news.controllers");
+
+
+const {
+    handleInvalidPath,
+    handleCustomErrors,
+    handlePsqlErrors
+} = require("./controllers/errors.controllers");
 
 const app = express();
+
+app.use(express.json())
 
 app.get("/api", (request, response) => {
     response.status(200).send({endpoints})
@@ -18,7 +31,9 @@ app.get("/api/articles/:id", getArticleById);
 
 app.get("/api/articles/:id/comments", getCommentsByArticleId);
 
-app.use(handleCumstomErrors);
+app.post("/api/articles/:id/comments", postCommentByArticleId);
+
+app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
 

@@ -1,5 +1,9 @@
-// const {response} = require("express");
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchCommentsByArticleId} = require("../models/news.models");
+const {fetchAllTopics, 
+    fetchArticleById, 
+    fetchAllArticles, 
+    fetchCommentsByArticleId,
+    insertCommentByArticleId
+} = require("../models/news.models");
 
 const getAllTopics = (request, response) => {
     fetchAllTopics()
@@ -7,8 +11,10 @@ const getAllTopics = (request, response) => {
     })
 }
 
+const { convertTimestampToDate } = require('../db/seeds/utils')
+
+
 const getArticleById = (request, response, next) => {
-    
     const {id} = request.params;
     fetchArticleById(id)
     .then(( article ) => {response.status(200).send({article});
@@ -27,11 +33,33 @@ const getAllArticles = (request, response) => {
 const getCommentsByArticleId = (request, response, next) => {
     const {id} = request.params;
     fetchCommentsByArticleId(id)
-    .then(( rows ) => {response.status(200).send({rows});
+    .then(( comments ) => {response.status(200).send({comments});
     })
     .catch((err) => {
         next(err);
     });
 };
 
-module.exports = {getAllTopics, getArticleById, getAllArticles, getCommentsByArticleId}
+const postCommentByArticleId = (request, response, next) => {
+    const {id} = request.params;
+    const {username, body} = request.body
+    const dateNow = Date.now()
+    const dateNowObj = {created_at: dateNow}
+    const convertedDate = convertTimestampToDate(dateNowObj)
+    const convertedDateParam = convertedDate.created_at
+    insertCommentByArticleId(username, body, id, convertedDate.created_at)
+    .then(( comment ) => {response.status(201).send({ comment });
+    })
+    .catch((err) => {
+        next(err);
+    });
+};
+
+
+module.exports = {
+    getAllTopics, 
+    getArticleById, 
+    getAllArticles, 
+    getCommentsByArticleId,
+    postCommentByArticleId
+}

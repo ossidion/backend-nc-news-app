@@ -1,6 +1,14 @@
 const {
-  convertTimestampToDate
+  convertTimestampToDate,
+  checkIfArticleIdExists
 } = require("../db/seeds/utils");
+
+const request = require("supertest")
+const app = require("../app.js")
+const seed = require("../db/seeds/seed")
+const db = require("../db/connection");
+const data = require('../db/data/test-data/index');
+const sorted = require('jest-sorted')
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {
@@ -39,4 +47,3 @@ describe("convertTimestampToDate", () => {
     expect(result).toEqual(expected);
   });
 });
-
