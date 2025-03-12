@@ -49,5 +49,21 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:id/comments": {
+    "description": "Add a comment to a specified article",
+    "queries": [],
+    "exampleResponse": {
+      "rows": [
+        {
+          "comment_id": 19,
+          "votes": 0,
+          "created_at": "2020-09-19T23:10:00.000Z",
+          "author": "rogersop",
+          "body": "A cloud weighs around a million tonnes.",
+          "article_id": 3
+        }
+      ]
+    }
   }
 }

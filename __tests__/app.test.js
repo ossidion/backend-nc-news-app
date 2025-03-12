@@ -121,8 +121,9 @@ describe("GET /api/article/:article_id/comments", () => {
       .get("/api/articles/3/comments")
       .expect(200)
       .then(({body}) => {
-        expect(body.rows).toBeSortedBy("created_at", {descending: true,});
-        body.rows.forEach(comment => {
+        expect(body.comments).toBeSortedBy("created_at", {descending: true,});
+        expect(body.comments.length).toBe(2)
+        body.comments.forEach(comment => {
           expect(comment.article_id).toBe(3);
           expect(comment).toEqual(expect.objectContaining({
             comment_id: expect.any(Number), 
@@ -136,6 +137,16 @@ describe("GET /api/article/:article_id/comments", () => {
       });
   });
 
+  test("200: Responds with a message if no comments associated with specified article.", () => {
+    const id = 4
+    return request(app)
+      .get(`/api/articles/${id}/comments`)
+      .expect(200)
+      .then(({body}) => {
+        expect(body.comments).toBe(`There are no comments associated with this article: ${id}`);
+      });
+  });
+
   test("404: Responds with a 404 error if article not found.", () => {
     const id = 4566546
     return request(app)
@@ -146,15 +157,6 @@ describe("GET /api/article/:article_id/comments", () => {
       });
   });
 
-  test("404: Responds with a 404 error if no comments associated with specified article.", () => {
-    const id = 4
-    return request(app)
-      .get(`/api/articles/${id}/comments`)
-      .expect(404)
-      .then(({body}) => {
-        expect(body.msg).toBe(`There are no comments associated with this article: ${id}`);
-      });
-  });
 
   test("400: Responds with a 400 error if made a bad request.", () => {
     const id = "banana"
@@ -166,3 +168,80 @@ describe("GET /api/article/:article_id/comments", () => {
       });
   });
 });
+
+
+describe("POST /api/article/:article_id/comments", () => {
+  test("201: Creates a new comment for specified article and inserts the comment into the database, responding with the inserted comment", () => {
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send({
+        username: 'rogersop',
+        body: 'A cloud weighs around a million tonnes.'
+      })
+      .expect(201)
+      .then(({ body }) => {
+          const comment = body.comment
+          expect(comment.comment_id).toBe(19);
+          expect(comment.body).toBe("A cloud weighs around a million tonnes.");
+          expect(comment.votes).toBe(0);
+          expect(comment.author).toBe("rogersop");
+          expect(comment.article_id).toBe(3);
+
+          expect(typeof comment.created_at).toBe("string");
+        });
+      });
+  
+
+  test("404: Responds with a 404 error if article not found.", () => {
+    const id = 4566546
+    return request(app)
+      .post(`/api/articles/${id}/comments`)
+      .send({
+        username: 'rogersop',
+        body: 'A cloud weighs around a million tonnes.'
+      })
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe(`Article not found with id: ${id}`);
+      });
+  });
+
+
+  test("400: Responds with a 400 error if bad id request.", () => {
+    const id = "banana"
+    return request(app)
+      .post(`/api/articles/${id}/comments`)
+      .send({
+        username: 'rogersop',
+        body: 'A cloud weighs around a million tonnes.'
+      })
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad Request.");
+      });
+  });
+
+  test("400: Responds with a 400 error if invalid data is posted.", () => {
+    return request(app)
+    .post(`/api/articles/3/comments`)
+    .send({
+      username: 1,
+      body: 37
+    }).expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Invalid data");
+      });
+  });
+
+  test("400: Responds with a 400 error if username does not exist.", () => {
+    return request(app)
+    .post(`/api/articles/3/comments`)
+    .send({
+      username: 'Alexander',
+      body: 'A cloud weighs around a million tonnes.'
+    }).expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("User does not exist");
+      });
+  });
+})

@@ -1,4 +1,11 @@
 const db = require("../db/connection");
+const { commentData } = require("../db/data/test-data");
+const format = require("pg-format");
+const {
+    checkIfArticleIdExists
+    } = require("../db/seeds/utils");
+
+
 
 
 const fetchAllTopics = (topic) => {
@@ -35,6 +42,7 @@ const fetchAllArticles = () => {
 }
 
 const fetchCommentsByArticleId = (id) => {
+    
     return db.query("SELECT article_id FROM articles WHERE article_id = $1", [id])
     .then(({rows}) => {
         const article = rows[0];
@@ -48,14 +56,52 @@ const fetchCommentsByArticleId = (id) => {
             .then(({rows}) => {
                 const commentCheck = rows[0];
                 if (!commentCheck) {
-                    return Promise.reject({
-                        status: 404, 
-                        msg: `There are no comments associated with this article: ${id}`,
-                    });
-                }
-                return rows;
-        });
-    }}
-)};
+                    rows = `There are no comments associated with this article: ${id}`
+                    return rows
+                };
+                return rows})
+            }
+    });
+}
 
-module.exports = {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchCommentsByArticleId}
+const insertCommentByArticleId = (username, body, article_id, convertedDate) => {
+    return db.query("SELECT article_id FROM articles WHERE article_id = $1", [article_id])
+    .then(({rows}) => {
+        const article = rows[0];
+        if (!article) {
+            return Promise.reject({
+                status: 404, 
+                msg: `Article not found with id: ${article_id}`,
+            });
+        } else {
+            if (typeof body && typeof username === 'string') {
+                return db.query("SELECT username FROM users WHERE username = $1", [username])
+                .then(({rows}) => {
+                    const user = rows[0]
+                    if (!user) {
+                        return Promise.reject({
+                            status: 400, 
+                            msg: `User does not exist`,
+                        });
+                    } else {
+                        return db.query(`INSERT INTO comments (article_id, body, author, created_at) VALUES ($1, $2, $3, $4) RETURNING *`, [article_id, body, username, convertedDate])
+                        .then(({ rows }) => {
+                            return rows[0]})}})
+            } else {
+                return Promise.reject({
+                    status: 400, 
+                    msg: `Invalid data`,
+                });
+            }
+        }
+    });
+
+}
+
+module.exports = {
+    fetchAllTopics,
+    fetchArticleById, 
+    fetchAllArticles, 
+    fetchCommentsByArticleId,
+    insertCommentByArticleId
+}

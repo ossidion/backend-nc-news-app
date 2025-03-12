@@ -24,3 +24,12 @@ ORDER BY comments.created_at DESC;
 
 
 SELECT article_id FROM articles WHERE article_id = 1;
+
+
+\echo 'ticket-6'
+
+INSERT INTO comments (article_id, body, author)
+VALUES (8, 'A cloud weighs around a million tonnes.', 'rogersop')
+RETURNING *;
+
+SELECT * FROM comments;
