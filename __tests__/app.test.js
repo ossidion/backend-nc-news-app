@@ -260,6 +260,10 @@ describe("PATCH /api/article/:article_id", () => {
         expect(article.title).toBe("Sony Vaio; or, The Laptop");
         expect(article.topic).toBe("mitch");
         expect(article.votes).toBe(4);
+        expect(typeof article.author).toBe("string");
+        expect(typeof article.article_id).toBe("number");
+        expect(typeof article.created_at).toBe("string");
+        expect(typeof article.article_img_url).toBe("string");
         });
       });
   
@@ -275,6 +279,10 @@ describe("PATCH /api/article/:article_id", () => {
         expect(article.title).toBe("Living in the shadow of a great man");
         expect(article.topic).toBe("mitch");
         expect(article.votes).toBe(96);
+        expect(typeof article.author).toBe("string");
+        expect(typeof article.article_id).toBe("number");
+        expect(typeof article.created_at).toBe("string");
+        expect(typeof article.article_img_url).toBe("string");
         });
       });
 
@@ -290,7 +298,6 @@ describe("PATCH /api/article/:article_id", () => {
         expect(body.msg).toBe(`Article not found with id: ${id}`);
       });
   });
-
 
   test("400: Responds with a 400 error if bad id request.", () => {
     const id = "banana"
@@ -317,3 +324,33 @@ describe("PATCH /api/article/:article_id", () => {
       });
   });
 })
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: delete the given comment by comment_id", () => {
+    const id = 1
+    return request(app)
+      .delete(`/api/comments/${id}`)
+      .expect(204)
+      });
+
+  test("404: Responds with a 404 error if comment not found.", () => {
+    const id = 458
+    return request(app)
+    .delete(`/api/comments/${id}`)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe(`Comment not found with id: ${id}`);
+      });
+  });
+
+
+  test("400: Responds with a 400 error if bad id request.", () => {
+    const id = "banana"
+    return request(app)
+      .delete(`/api/comments/${id}`)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad Request.");
+      });
+  });
+  });

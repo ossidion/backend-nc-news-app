@@ -3,7 +3,8 @@ const {fetchAllTopics,
     fetchAllArticles, 
     fetchCommentsByArticleId,
     insertCommentByArticleId,
-    editArticleVoteById
+    editArticleVoteById,
+    removeCommentById
 } = require("../models/news.models");
 
 const getAllTopics = (request, response) => {
@@ -68,6 +69,16 @@ const patchArticleVoteById = (request, response, next) => {
     });
 };
 
+const deleteCommentById = (request, response, next) => {
+    const {id} = request.params;
+    removeCommentById(id)
+    .then(( comment ) => {response.status(204).send({ comment })
+    })
+    .catch((err) => {
+        next(err);
+    });
+};
+
 
 module.exports = {
     getAllTopics, 
@@ -75,5 +86,6 @@ module.exports = {
     getAllArticles, 
     getCommentsByArticleId,
     postCommentByArticleId,
-    patchArticleVoteById
+    patchArticleVoteById,
+    deleteCommentById
 }

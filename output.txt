@@ -16,6 +16,7 @@ You are now connected to database "nc_news_test" as user "ossidion".
 
  article_id |                         title                          | topic |    author     |                                                                                     body                                                                                      |     created_at      | votes |                                            article_img_url                                            
 ------------+--------------------------------------------------------+-------+---------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+-------+-------------------------------------------------------------------------------------------------------
+          1 | Living in the shadow of a great man                    | mitch | butter_bridge | I find this existence challenging                                                                                                                                             | 2020-07-09 21:11:00 |   100 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
           2 | Sony Vaio; or, The Laptop                              | mitch | icellusedkars | Call me Mitchell. Some years ago..                                                                                                                                            | 2020-10-16 06:03:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
           3 | Eight pug gifs that remind me of mitch                 | mitch | icellusedkars | some gifs                                                                                                                                                                     | 2020-11-03 09:12:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
           4 | Student SUES Mitch!                                    | mitch | rogersop      | We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages | 2020-05-06 02:14:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
@@ -28,7 +29,6 @@ You are now connected to database "nc_news_test" as user "ossidion".
          11 | Am I a cat?                                            | mitch | icellusedkars | Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?                                                                  | 2020-01-15 22:21:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
          12 | Moustache                                              | mitch | butter_bridge | Have you seen the size of that thing?                                                                                                                                         | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
          13 | Another article about Mitch                            | mitch | butter_bridge | There will never be enough articles about Mitch!                                                                                                                              | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
-          1 | Living in the shadow of a great man                    | mitch | butter_bridge | I find this existence challenging                                                                                                                                             | 2020-07-09 21:11:00 |   104 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700
 (13 rows)
 
  comment_id | article_id |                                                                                         body                                                                                         | votes |    author     |     created_at      
@@ -51,7 +51,8 @@ You are now connected to database "nc_news_test" as user "ossidion".
          16 |          6 | This is a bad article name                                                                                                                                                           |     1 | butter_bridge | 2020-10-11 16:23:00
          17 |          9 | The owls are not what they seem.                                                                                                                                                     |    20 | icellusedkars | 2020-03-14 17:02:00
          18 |          1 | This morning, I showered for nine minutes.                                                                                                                                           |    16 | butter_bridge | 2020-07-21 01:20:00
-(18 rows)
+         19 |          8 | A cloud weighs around a million tonnes.                                                                                                                                              |     0 | rogersop      | 
+(19 rows)
 
 ticket-4
     author     |                         title                          | article_id | topic |     created_at      | votes |                                            article_img_url                                            | comment_count 
@@ -62,11 +63,11 @@ ticket-4
  butter_bridge | Another article about Mitch                            |         13 | mitch | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
  butter_bridge | Moustache                                              |         12 | mitch | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
  rogersop      | UNCOVERED: catspiracy to bring down democracy          |          5 | cats  | 2020-08-03 14:14:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             2
- butter_bridge | Living in the shadow of a great man                    |          1 | mitch | 2020-07-09 21:11:00 |   104 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |            11
+ butter_bridge | Living in the shadow of a great man                    |          1 | mitch | 2020-07-09 21:11:00 |   100 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |            11
  butter_bridge | They're not exactly dogs, are they?                    |          9 | mitch | 2020-06-06 10:10:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             2
  rogersop      | Seven inspirational thought leaders from Manchester UK |         10 | mitch | 2020-05-14 05:15:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
  rogersop      | Student SUES Mitch!                                    |          4 | mitch | 2020-05-06 02:14:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
- icellusedkars | Does Mitch predate civilisation?                       |          8 | mitch | 2020-04-17 02:08:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
+ icellusedkars | Does Mitch predate civilisation?                       |          8 | mitch | 2020-04-17 02:08:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             1
  icellusedkars | Am I a cat?                                            |         11 | mitch | 2020-01-15 22:21:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
  icellusedkars | Z                                                      |          7 | mitch | 2020-01-07 14:08:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
 (13 rows)
@@ -95,7 +96,7 @@ ticket-5
 ticket-6
  comment_id | article_id |                  body                   | votes |  author  | created_at 
 ------------+------------+-----------------------------------------+-------+----------+------------
-         19 |          8 | A cloud weighs around a million tonnes. |     0 | rogersop | 
+         20 |          8 | A cloud weighs around a million tonnes. |     0 | rogersop | 
 (1 row)
 
 INSERT 0 1
@@ -120,11 +121,17 @@ INSERT 0 1
          17 |          9 | The owls are not what they seem.                                                                                                                                                     |    20 | icellusedkars | 2020-03-14 17:02:00
          18 |          1 | This morning, I showered for nine minutes.                                                                                                                                           |    16 | butter_bridge | 2020-07-21 01:20:00
          19 |          8 | A cloud weighs around a million tonnes.                                                                                                                                              |     0 | rogersop      | 
-(19 rows)
+         20 |          8 | A cloud weighs around a million tonnes.                                                                                                                                              |     0 | rogersop      | 
+(20 rows)
 
 ticket-7
  votes 
 -------
-   104
+   100
+(1 row)
+
+ comment_id 
+------------
+          1
 (1 row)
 
