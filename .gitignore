@@ -1,2 +1,4 @@
 node_modules
 .env.*
+my-queries.sql
+output.txt

@@ -40,3 +40,7 @@ SELECT * FROM comments;
 SELECT votes 
 FROM articles 
 WHERE article_id = 1;
+
+
+
+SELECT comment_id FROM comments WHERE comment_id = 1;

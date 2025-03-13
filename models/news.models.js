@@ -111,7 +111,6 @@ const editArticleVoteById = (inc_votes, article_id) => {
                     }
                 })
                 .then(({}) => { 
-                    console.log(totalVotes)
                     return db.query(`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *`, [totalVotes, article_id])
                 })
                 .then(({ rows }) => {
@@ -122,11 +121,34 @@ const editArticleVoteById = (inc_votes, article_id) => {
                     status: 400, 
                     msg: `Invalid data`
                 })
-
             }
-    }})
-            
+    }})            
 }
+
+
+const removeCommentById = (id) => {
+    if (typeof Number(id) === 'number') {
+        
+        return db.query(`SELECT comment_id FROM comments WHERE comment_id = $1`, [id])
+        .then(({rows}) => {
+            const comment = rows[0]
+            if (!comment) {
+                return Promise.reject({
+                    status: 404, 
+                    msg: `Comment not found with id: ${id}`});
+            } else {
+                return db.query("DELETE from comments WHERE comment_id = $1", [id])
+                .then(({rows}) => {
+                    return rows})
+            }
+        })
+    } else {
+        return Promise.reject({
+            status: 400, 
+            msg: `Invalid data`})
+    }
+}
+
             
                 
                 
@@ -137,5 +159,6 @@ module.exports = {
     fetchAllArticles, 
     fetchCommentsByArticleId,
     insertCommentByArticleId,
-    editArticleVoteById
+    editArticleVoteById,
+    removeCommentById
 }
