@@ -59,15 +59,16 @@ describe("GET /api/article/:id", () => {
     return request(app)
       .get("/api/articles/4")
       .expect(200)
-      .then(({body}) => {
-        expect(body.article.article_id).toBe(4);
-        expect(typeof body.article.author).toBe("string");
-        expect(typeof body.article.title).toBe("string");
-        expect(typeof body.article.body).toBe("string");
-        expect(typeof body.article.topic).toBe("string");
-        expect(typeof body.article.created_at).toBe("string");
-        expect(typeof body.article.votes).toBe("number");
-        expect(typeof body.article.article_img_url).toBe("string");
+      .then(({ body }) => {
+        const article = body.updatedArticle
+        expect(article.article_id).toBe(4);
+        expect(typeof article.author).toBe("string");
+        expect(typeof article.title).toBe("string");
+        expect(typeof article.body).toBe("string");
+        expect(typeof article.topic).toBe("string");
+        expect(typeof article.created_at).toBe("string");
+        expect(typeof article.votes).toBe("number");
+        expect(typeof article.article_img_url).toBe("string");
       });
   });
 
@@ -242,6 +243,77 @@ describe("POST /api/article/:article_id/comments", () => {
     }).expect(400)
       .then(({body}) => {
         expect(body.msg).toBe("User does not exist");
+      });
+  });
+})
+
+describe("PATCH /api/article/:article_id", () => {
+  test("201: update an article by article_id with vote increment", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({
+        inc_votes: 4
+      })
+      .expect(201)
+      .then(({ body }) => {
+        const article = body.article
+        expect(article.title).toBe("Sony Vaio; or, The Laptop");
+        expect(article.topic).toBe("mitch");
+        expect(article.votes).toBe(4);
+        });
+      });
+  
+  test("201: update an article by article_id with vote decrement", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        inc_votes: -4
+      })
+      .expect(201)
+      .then(({ body }) => {
+        const article = body.article
+        expect(article.title).toBe("Living in the shadow of a great man");
+        expect(article.topic).toBe("mitch");
+        expect(article.votes).toBe(96);
+        });
+      });
+
+  test("404: Responds with a 404 error if article not found.", () => {
+    const id = 4566546
+    return request(app)
+    .patch(`/api/articles/${id}`)
+    .send({
+      inc_votes: 4
+    })
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe(`Article not found with id: ${id}`);
+      });
+  });
+
+
+  test("400: Responds with a 400 error if bad id request.", () => {
+    const id = "banana"
+    return request(app)
+      .patch(`/api/articles/${id}`)
+      .send({
+        inc_votes: 4
+      })
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad Request.");
+      });
+  });
+
+  test("400: Responds with a 400 error if invalid data is posted.", () => {
+    return request(app)
+    .patch(`/api/articles/3`)
+    .send({
+      inc_votes: "d"
+    })
+    .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Invalid data");
       });
   });
 })

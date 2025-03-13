@@ -33,3 +33,10 @@ VALUES (8, 'A cloud weighs around a million tonnes.', 'rogersop')
 RETURNING *;
 
 SELECT * FROM comments;
+
+
+\echo 'ticket-7'
+
+SELECT votes 
+FROM articles 
+WHERE article_id = 1;
