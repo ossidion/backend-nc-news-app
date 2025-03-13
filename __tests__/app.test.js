@@ -354,3 +354,19 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
   });
+
+  describe("GET /api/users", () => {
+    test("200: Responds with an array of user objects each of which should have a username, avatar and avatar_url", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.rows.length).not.toBe(0);
+          body.rows.forEach(user => {
+            expect(typeof user.username).toBe("string");
+            expect(typeof user.name).toBe("string");
+            expect(typeof user.avatar_url).toBe("string");
+          });
+        });
+    });
+  });

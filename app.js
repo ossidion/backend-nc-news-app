@@ -7,7 +7,8 @@ const {
     getCommentsByArticleId,
     postCommentByArticleId,
     patchArticleVoteById,
-    deleteCommentById
+    deleteCommentById,
+    getAllUsers
 } = require("./controllers/news.controllers");
 
 
@@ -38,6 +39,8 @@ app.post("/api/articles/:id/comments", postCommentByArticleId);
 app.patch("/api/articles/:id", patchArticleVoteById);
 
 app.delete("/api/comments/:id", deleteCommentById);
+
+app.get("/api/users", getAllUsers);
 
 app.use(handleCustomErrors);
 

@@ -4,7 +4,8 @@ const {fetchAllTopics,
     fetchCommentsByArticleId,
     insertCommentByArticleId,
     editArticleVoteById,
-    removeCommentById
+    removeCommentById,
+    fetchAllUsers
 } = require("../models/news.models");
 
 const getAllTopics = (request, response) => {
@@ -79,6 +80,14 @@ const deleteCommentById = (request, response, next) => {
     });
 };
 
+const getAllUsers = (request, response) => {
+    fetchAllUsers()
+    // .then(( rows ) => {console.log(rows)
+    // })
+    .then(( rows ) => {response.status(200).send({rows})
+    })
+}
+
 
 module.exports = {
     getAllTopics, 
@@ -87,5 +96,6 @@ module.exports = {
     getCommentsByArticleId,
     postCommentByArticleId,
     patchArticleVoteById,
-    deleteCommentById
+    deleteCommentById,
+    getAllUsers
 }
