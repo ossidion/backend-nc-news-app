@@ -1,12 +1,6 @@
 const db = require("../db/connection");
 const { commentData } = require("../db/data/test-data");
 const format = require("pg-format");
-const {
-    checkIfArticleIdExists
-    } = require("../db/seeds/utils");
-
-
-
 
 const fetchAllTopics = (topic) => {
     return db.query("SELECT slug, description FROM topics")
@@ -92,16 +86,56 @@ const insertCommentByArticleId = (username, body, article_id, convertedDate) => 
                     status: 400, 
                     msg: `Invalid data`,
                 });
-            }
-        }
+            };
+        };
     });
+};
 
+const editArticleVoteById = (inc_votes, article_id) => {
+    return db.query("SELECT article_id FROM articles WHERE article_id = $1", [article_id])
+    .then(({rows}) => {
+        const article = rows[0];
+        if (!article) {
+            return Promise.reject({
+                status: 404, 
+                msg: `Article not found with id: ${article_id}`,
+            });
+        } else {
+            if (typeof inc_votes === 'number') {
+                return db.query(`SELECT votes FROM articles WHERE article_id = $1`, [article_id])
+                .then(({rows}) => {                    
+                    if (Math.sign(inc_votes) === 1) { 
+                        return totalVotes = rows[0].votes + inc_votes
+                    } else if (Math.sign(inc_votes) === -1) {
+                        return totalVotes = rows[0].votes + inc_votes
+                    }
+                })
+                .then(({}) => { 
+                    console.log(totalVotes)
+                    return db.query(`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *`, [totalVotes, article_id])
+                })
+                .then(({ rows }) => {
+                    return rows[0]
+                }
+            )} else {
+                return Promise.reject({
+                    status: 400, 
+                    msg: `Invalid data`
+                })
+
+            }
+    }})
+            
 }
+            
+                
+                
 
 module.exports = {
     fetchAllTopics,
     fetchArticleById, 
     fetchAllArticles, 
     fetchCommentsByArticleId,
-    insertCommentByArticleId
+    insertCommentByArticleId,
+    editArticleVoteById
 }

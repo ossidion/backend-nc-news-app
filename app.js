@@ -5,7 +5,8 @@ const {
     getArticleById, 
     getAllArticles, 
     getCommentsByArticleId,
-    postCommentByArticleId
+    postCommentByArticleId,
+    patchArticleVoteById
 } = require("./controllers/news.controllers");
 
 
@@ -33,6 +34,8 @@ app.get("/api/articles/:id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:id/comments", postCommentByArticleId);
 
+app.patch("/api/articles/:id", patchArticleVoteById);
+
 app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
@@ -42,8 +45,5 @@ app.use("*", handleInvalidPath);
 app.use((err, request, response, next) => {
     response.status(500).send({ message: "Internal server error."})
 });
-
-
-
 
 module.exports = app

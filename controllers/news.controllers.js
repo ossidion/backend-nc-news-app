@@ -2,7 +2,8 @@ const {fetchAllTopics,
     fetchArticleById, 
     fetchAllArticles, 
     fetchCommentsByArticleId,
-    insertCommentByArticleId
+    insertCommentByArticleId,
+    editArticleVoteById
 } = require("../models/news.models");
 
 const getAllTopics = (request, response) => {
@@ -17,7 +18,7 @@ const { convertTimestampToDate } = require('../db/seeds/utils')
 const getArticleById = (request, response, next) => {
     const {id} = request.params;
     fetchArticleById(id)
-    .then(( article ) => {response.status(200).send({article});
+    .then(( updatedArticle ) => {response.status(200).send({updatedArticle});
     })
     .catch((err) => {
         next(err);
@@ -56,10 +57,23 @@ const postCommentByArticleId = (request, response, next) => {
 };
 
 
+const patchArticleVoteById = (request, response, next) => {
+    const {id} = request.params;
+    const {inc_votes} = request.body
+    editArticleVoteById(inc_votes, id)
+    .then(( article ) => {response.status(201).send({ article })
+    })
+    .catch((err) => {
+        next(err);
+    });
+};
+
+
 module.exports = {
     getAllTopics, 
     getArticleById, 
     getAllArticles, 
     getCommentsByArticleId,
-    postCommentByArticleId
+    postCommentByArticleId,
+    patchArticleVoteById
 }
