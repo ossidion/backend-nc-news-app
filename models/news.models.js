@@ -148,8 +148,13 @@ const removeCommentById = (id) => {
             msg: `Invalid data`})
     }
 }
-
             
+const fetchAllUsers = (users) => {
+    return db.query("SELECT username, name, avatar_url FROM users")
+    .then(({rows}) => {
+        return rows
+    })
+}
                 
                 
 
@@ -160,5 +165,6 @@ module.exports = {
     fetchCommentsByArticleId,
     insertCommentByArticleId,
     editArticleVoteById,
-    removeCommentById
+    removeCommentById,
+    fetchAllUsers
 }
