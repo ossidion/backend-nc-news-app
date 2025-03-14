@@ -18,7 +18,50 @@ const fetchArticleById = (id) => {
     });
 };
 
-const fetchAllArticles = (sort_by = 'created_at', order = 'desc') => {
+const fetchAllArticles = (sort_by = 'created_at', order = 'desc', topic) => {
+
+    if (topic) {
+        return db.query('SELECT slug FROM topics WHERE slug = $1', [topic])
+        .then(({rows}) => {
+            const topicCheck = rows[0]
+            if (topicCheck === undefined) return Promise.reject({status: 404, msg: `Topic does not exist`});
+
+            return db.query('SELECT article_id FROM articles WHERE topic = $1', [topic])
+        })
+
+        .then(({rows}) => {
+            const articleCheck = rows[0]
+            if (articleCheck === undefined) return Promise.reject({status: 404, msg: `There are no articles with this topic.`});
+                        
+            const allowedSortByQueries = ['author', 'title', 'article_id', 'topic', 'votes', 'article_img_url', 'comment_count', 'created_at'];
+            
+            const allowedOrderQueries = ['asc', 'desc'];
+            
+            if (!allowedSortByQueries.includes(sort_by) || !allowedOrderQueries.includes(order)) return Promise.reject({status: 400, msg: `Invalid query`});
+            
+            let queryString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id`
+        
+            const queryValue = []            
+            
+            queryString += ` WHERE topic = $1`;
+            queryValue.push(topic)
+            
+            queryString += ` GROUP BY articles.article_id`;
+        
+            queryString += ` ORDER BY ${sort_by}`;
+        
+            queryString += ` ${order}`;
+        
+            return db.query(queryString, queryValue)
+    
+            .then(({rows}) => {
+                rows.forEach(article => {
+                    article.comment_count = Number(article.comment_count)
+                })
+                return rows
+            })
+        })
+    }
 
     const allowedSortByQueries = ['author', 'title', 'article_id', 'topic', 'votes', 'article_img_url', 'comment_count', 'created_at'];
 
@@ -26,9 +69,10 @@ const fetchAllArticles = (sort_by = 'created_at', order = 'desc') => {
 
     if (!allowedSortByQueries.includes(sort_by) || !allowedOrderQueries.includes(order)) return Promise.reject({status: 400, msg: `Invalid query`});
 
+    let queryString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id`
 
-    let queryString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id`;
-
+    queryString += ` GROUP BY articles.article_id`;
+        
     queryString += ` ORDER BY ${sort_by}`;
 
     queryString += ` ${order}`;
