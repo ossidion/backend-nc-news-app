@@ -26,6 +26,19 @@
       ]
     }
   },
+  "GET /api/articles/:id": {
+    "description": "Responds with an article object.",
+    "queries": [],
+    "exampleResponse": {
+      "title": "Living in the shadow of a great man",
+      "topic": "mitch",
+      "author": "butter_bridge",
+      "body": "I find this existence challenging",
+      "created_at": "2020-07-09 21:11:00",
+      "votes": 96,
+      "comment_count": 11
+    }
+  },
   "GET /api/articles/:id/comments": {
     "description": "serves an array of all comments associated with a specified article_id",
     "queries": [],
