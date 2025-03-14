@@ -511,4 +511,44 @@ describe("GET /api/articles (topic query) - filters the articles by the topic va
     })
   })
 })
+  
+describe("GET /api/article/:id (comment count)", () => {
+  test("200: Responds with an article object, which should have comment count.", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const article = body.updatedArticle
+        expect(article.article_id).toBe(1);
+        expect(typeof article.author).toBe("string");
+        expect(typeof article.title).toBe("string");
+        expect(typeof article.body).toBe("string");
+        expect(typeof article.topic).toBe("string");
+        expect(typeof article.created_at).toBe("string");
+        expect(typeof article.votes).toBe("number");
+        expect(typeof article.article_img_url).toBe("string");
+        expect(typeof article.comment_count).toBe("number");
+      });
+  });
+
+  test("404: Responds with a 404 error if object not found", () => {
+    const id = 4286723
+    return request(app)
+      .get(`/api/articles/${id}`)
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe(`Article not found with id: ${id}`);
+      });
+  });
+
+  test("400: Responds with a 400 error if made a bad request", () => {
+    const id = "banana"
+    return request(app)
+      .get(`/api/articles/${id}`)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad Request.");
+      });
+  });
+});
 
