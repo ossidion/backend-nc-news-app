@@ -1,15 +1,10 @@
 const endpointsJson = require("../endpoints.json");
-/* Set up your test imports here */
-const request = require("supertest")
-const app = require("../app.js")
-const seed = require("../db/seeds/seed")
+
+const request = require("supertest");
+const app = require("../app.js");
+const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 const data = require('../db/data/test-data/index');
-const sorted = require('jest-sorted')
-
-
-/* Set up your beforeEach & afterAll functions here */
-
 
 beforeAll(() => seed(data));
 afterAll(() => db.end());
@@ -24,7 +19,6 @@ describe("ANY:/notAPath", () => {
       });
   });
 });
-
 
 describe("GET /api", () => {
   test("200: Responds with an object detailing the documentation for each endpoint", () => {
@@ -191,7 +185,6 @@ describe("POST /api/article/:article_id/comments", () => {
           expect(typeof comment.created_at).toBe("string");
         });
       });
-  
 
   test("404: Responds with a 404 error if article not found.", () => {
     const id = 4566546
@@ -350,23 +343,138 @@ describe("DELETE /api/comments/:comment_id", () => {
       .delete(`/api/comments/${id}`)
       .expect(400)
       .then(({body}) => {
-        expect(body.msg).toBe("Bad Request.");
+        expect(body.msg).toBe("Invalid data");
       });
   });
+});
+
+describe("GET /api/users", () => {
+  test("200: Responds with an array of user objects each of which should have a username, avatar and avatar_url", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.rows.length).not.toBe(0);
+        body.rows.forEach(user => {
+          expect(typeof user.username).toBe("string");
+          expect(typeof user.name).toBe("string");
+          expect(typeof user.avatar_url).toBe("string");
+        });
+      });
+  });
+});
+
+describe("GET /api/articles (sorting queries) - accepts queries; sort_by any valid column (defaults to created_at date); and order (defaults to descending).", () => {
+  test("200: Responds with an array of article objects, defaulting to created_at in descending order.", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.rows
+        expect(articles.length).not.toBe(0);
+        expect(articles).toBeSortedBy("created_at", {descending: true});
+        articles.forEach(article => {
+          expect(article).toEqual(expect.objectContaining({
+            article_id: expect.any(Number), 
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number)
+          }))
+        });
+      });
+  })
+
+  test("200: Responds with an array of article objects, sorted by title in descending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.rows
+        expect(articles.length).not.toBe(0);
+        expect(articles).toBeSortedBy("title", {descending: true});
+        articles.forEach(article => {
+          expect(article).toEqual(expect.objectContaining({
+            article_id: expect.any(Number), 
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number)
+          }))
+        });
+      });
+  })
+
+  test("200: Responds with an array of article objects, sorted by article_id in ascending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.rows
+        expect(articles.length).not.toBe(0);
+        expect(articles).toBeSortedBy("article_id", {ascending: true});
+        articles.forEach(article => {
+          expect(article).toEqual(expect.objectContaining({
+            article_id: expect.any(Number), 
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number)
+          }))
+        });
+      });
+  })
+
+  test("200: Responds with an array of article objects, sorted by comment_count in ascending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.rows
+        expect(articles.length).not.toBe(0);
+        expect(articles).toBeSortedBy("comment_count", {ascending: true});
+        articles.forEach(article => {
+          expect(article).toEqual(expect.objectContaining({
+            article_id: expect.any(Number), 
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number)
+          }))
+        });
+      });
+  })
+
+  test("400: Responds with a 400 error if column to sort by is not allowed.", () => {
+    const query = "banana"
+    return request(app)
+      .get(`/api/articles?sort_by=${query}`)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe(`Invalid query`);
+      });
   });
 
-  describe("GET /api/users", () => {
-    test("200: Responds with an array of user objects each of which should have a username, avatar and avatar_url", () => {
-      return request(app)
-        .get("/api/users")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.rows.length).not.toBe(0);
-          body.rows.forEach(user => {
-            expect(typeof user.username).toBe("string");
-            expect(typeof user.name).toBe("string");
-            expect(typeof user.avatar_url).toBe("string");
-          });
-        });
-    });
+  test("400: Responds with a 400 error if order is not allowed.", () => {
+    const query = "banana"
+    return request(app)
+      .get(`/api/articles?order=${query}`)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe(`Invalid query`);
+      });
   });
+});
+
