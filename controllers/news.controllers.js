@@ -24,13 +24,17 @@ const getArticleById = (request, response, next) => {
     })
     .catch((err) => {
         next(err);
-    });
-};
-
-const getAllArticles = (request, response) => {
-    fetchAllArticles()
-    .then(( rows ) => {response.status(200).send({rows})
     })
+}
+
+const getAllArticles = (request, response, next) => {
+    const {sort_by, order} = request.query
+    fetchAllArticles(sort_by, order)
+    .then(( rows ) => {response.status(200).send({rows});
+    })
+    .catch((err) => {
+        next(err);
+    });
 }
 
 const getCommentsByArticleId = (request, response, next) => {
@@ -82,8 +86,6 @@ const deleteCommentById = (request, response, next) => {
 
 const getAllUsers = (request, response) => {
     fetchAllUsers()
-    // .then(( rows ) => {console.log(rows)
-    // })
     .then(( rows ) => {response.status(200).send({rows})
     })
 }
