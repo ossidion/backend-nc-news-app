@@ -478,3 +478,37 @@ describe("GET /api/articles (sorting queries) - accepts queries; sort_by any val
   });
 });
 
+describe("GET /api/articles (topic query) - filters the articles by the topic value specified in the query. If the query is omitted, the endpoint should respond with all articles.", () => {
+  test("200: Responds with an array of article objects, filtered by the topic given.", () => {
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({ body }) => {
+      const articles = body.rows
+      articles.forEach(article => {
+        expect(article.topic).toBe("mitch");
+      })
+    })
+  })
+  
+  test("404: Responds with a 404 error if topic does not exist.", () => {
+    const topic = "stars"
+    return request(app)
+    .get(`/api/articles?topic=${topic}`)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe(`Topic does not exist`);
+    })
+  })
+  
+  test("404: Responds with a 404 error if there are no articles with requested topic.", () => {
+    const topic = "paper"
+    return request(app)
+    .get(`/api/articles?topic=${topic}`)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe(`There are no articles with this topic.`);
+    })
+  })
+})
+
