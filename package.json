@@ -8,11 +8,11 @@
     "seed-dev": "node ./db/seeds/run-seed.js",
     "test": "jest",
     "prepare": "husky install",
-    "start": "node listen.js",
+    "start": "nodemon listen.js",
     "test-seed": "jest seed.test.js",
     "queries": "node ./queries.js",
     "dev": "nodemon listen.js",
-    "seed-prod": "NDOE_ENV=production npm run seed-dev"
+    "seed-prod": "NODE_ENV=production npm run seed-dev"
   },
   "repository": {
     "type": "git",
