@@ -38,7 +38,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "pg": "^8.13.3",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "yarn": "^1.22.22"
   },
   "jest": {
     "setupFilesAfterEnv": [
