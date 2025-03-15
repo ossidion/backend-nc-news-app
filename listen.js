@@ -1,6 +1,8 @@
 const app = require("./app");
 
-app.listen(8080, (err) => {
+const { PORT = 8080 } = process.env
+
+app.listen(PORT, (err) => {
     if(err) {
         console.log(err);
     } else {
