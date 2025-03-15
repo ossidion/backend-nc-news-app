@@ -12,7 +12,7 @@
     "test-seed": "jest seed.test.js",
     "queries": "node ./queries.js",
     "dev": "nodemon listen.js",
-    "seed-prod": "NDOE_ENV=production npm run seed"
+    "seed-prod": "NDOE_ENV=production npm run seed-dev"
   },
   "repository": {
     "type": "git",
