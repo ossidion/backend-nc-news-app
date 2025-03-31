@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require("express");
 const endpoints = require("./endpoints.json");
 const {
@@ -11,14 +12,16 @@ const {
     getAllUsers
 } = require("./controllers/news.controllers");
 
-
 const {
     handleInvalidPath,
     handleCustomErrors,
     handlePsqlErrors
 } = require("./controllers/errors.controllers");
 
+
 const app = express();
+
+app.use(cors());
 
 app.use(express.json())
 
