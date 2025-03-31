@@ -21,9 +21,9 @@ const {
 
 const app = express();
 
-app.use(cors());
-
 app.use(express.json())
+
+app.use(cors());
 
 app.get("/api", (request, response) => {
     response.status(200).send({endpoints})
